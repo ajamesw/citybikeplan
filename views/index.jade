@@ -1,0 +1,62 @@
+extends layout
+
+block content
+  #header
+    a(title="{{info.name}}" href="http://www.strava.com/clubs/{{info.id}}")
+      img#clubAvatar(class="img-circle" ng-src="{{info.avatar}}")
+    #headerText
+      h1 {{info.name}}
+      h4 {{info.description}}
+    #clubStats
+      span {{activitySum.distance}} km ridden this month.  
+      br
+      span {{activitySum.elevation_gain}} m climbed.
+
+    #member(ng-repeat="member in members")
+      a(title="{{member.name}}" href="http://www.strava.com/athletes/{{member.id}}")
+        img#memberAvatar(class="img-circle" ng-src="{{member.avatar}}") 
+
+  #content
+    h2 Monthly Leaderboard
+    table(class="table table-striped")
+      thead
+        tr
+          th Name
+          th(class="clickable" ng-click="order('-distance')") Distance
+          th(class="clickable" ng-click="order('-ride_count')") Rides
+          th(class="clickable" ng-click="order('-elevation_gain')") Climbing
+          th(class="clickable" ng-click="order('-average_speed')") Avg. Speed
+          th(class="clickable" ng-click="order('-achievement_count')") Achievements
+      tbody
+        tr(ng-repeat="item in leaderboard | orderBy:predicate:reverse")
+          td
+            img#memberAvatar(class="img-circle" ng-src="{{item.avatar}}") 
+            span {{item.name}} 
+          td {{item.distance}} km
+          td {{item.ride_count}}
+          td {{item.elevation_gain}} m
+          td {{item.average_speed}} km/h
+          td {{item.achievement_count}}
+
+    #feed
+      h3 Latest Rides
+      table(class="table table-striped")
+        thead
+          tr
+            th Rider
+            th Date
+            th Ride
+            th Distance
+            th Avg. Speed
+        tbody
+          tr(ng-repeat="activity in activities")
+            td 
+              img#memberAvatar(class="img-circle" ng-src="{{activity.avatar}}") 
+              {{activity.athlete}}
+            td {{activity.start_date}}
+            td 
+              a(href="http://www.strava.com/activities/{{activity.id}}"){{activity.name}}
+            td {{activity.distance}} km
+            td {{activity.average_speed}} km/h
+
+
